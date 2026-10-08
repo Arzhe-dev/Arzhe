@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="Arzhe.Views.SystemAnalysisPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="48">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Analyse du syst&#xE8;me" FontSize="32" FontWeight="Bold"/>
+            <TextBlock Text="D&#xE9;tection du mat&#xE9;riel et de la configuration..."
+                       FontSize="14" Foreground="#B3FFFFFF" Margin="0,8,0,32"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource GlassCard}" VerticalAlignment="Center">
+            <StackPanel>
+                <TextBlock x:Name="StatusText" Text="Initialisation..."
+                           FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,24"/>
+                <ProgressBar x:Name="AnalysisProgress" Style="{StaticResource ArzheProgress}"
+                             Minimum="0" Maximum="100" Value="0"/>
+                <ItemsControl x:Name="DetailsList" Margin="0,24,0,0">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Foreground="#CCFFFFFF"
+                                       FontSize="13" Margin="0,6"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+
+        <Button Grid.Row="2" x:Name="NextButton" Content="Continuer"
+                Style="{StaticResource PrimaryButton}"
+                HorizontalAlignment="Right" IsEnabled="False" Click="Next_Click"/>
+    </Grid>
+</UserControl>

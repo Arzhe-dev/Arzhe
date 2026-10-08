@@ -1,0 +1,13 @@
+﻿# Build
+bin/
+obj/
+dist/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# System
+Thumbs.db
+desktop.ini

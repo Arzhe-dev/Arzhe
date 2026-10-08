@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Arzhe.ico</ApplicationIcon>
+    <AssemblyName>Arzhe</AssemblyName>
+    <RootNamespace>Arzhe</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <StartupObject>Arzhe.App</StartupObject>
+    <Version>1.0.0</Version>
+    <Company>Arzhe</Company>
+    <Product>Arzhe - Optimiseur Gaming</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.4.6" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\arzhe_moon_256.png" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="Arzhe.Views.WelcomePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <!-- Logo Lune Arzhe -->
+            <Image Source="/Resources/arzhe_moon_256.png"
+                   Width="240" Height="240"
+                   HorizontalAlignment="Center"
+                   RenderOptions.BitmapScalingMode="HighQuality">
+                <Image.RenderTransform>
+                    <ScaleTransform x:Name="LogoScale" ScaleX="0.7" ScaleY="0.7"/>
+                </Image.RenderTransform>
+                <Image.Effect>
+                    <DropShadowEffect Color="#7C5CFF" BlurRadius="60"
+                                      ShadowDepth="0" Opacity="0.7"/>
+                </Image.Effect>
+            </Image>
+
+            <!-- Nom de l'app -->
+            <TextBlock Text="Arzhe" FontSize="52" FontWeight="Bold"
+                       HorizontalAlignment="Center" Margin="0,24,0,0"
+                       Foreground="{StaticResource AccentGradient}">
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="#7C5CFF" BlurRadius="25"
+                                      ShadowDepth="0" Opacity="0.6"/>
+                </TextBlock.Effect>
+            </TextBlock>
+
+            <TextBlock Text="Optimiseur Gaming"
+                       FontSize="14" Foreground="#B3FFFFFF" Margin="0,6,0,0"
+                       HorizontalAlignment="Center"
+                       FontWeight="SemiBold"/>
+
+            <TextBlock Text="Analyse syst&#xE8;me  &#x2022;  Optimisations saines  &#x2022;  R&#xE9;sultats mesurables"
+                       FontSize="13" Foreground="#80FFFFFF"
+                       HorizontalAlignment="Center" Margin="0,36,0,50"/>
+
+            <Button x:Name="StartButton" Content="D&#xE9;marrer l'analyse"
+                    Style="{StaticResource PrimaryButton}"
+                    HorizontalAlignment="Center" Click="Start_Click"/>
+
+            <TextBlock Text="N&#xE9;cessite les droits administrateur"
+                       FontSize="11" Foreground="#66FFFFFF"
+                       HorizontalAlignment="Center" Margin="0,30,0,0"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

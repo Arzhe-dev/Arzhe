@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="Arzhe.Views.ExecutionPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="48">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Optimisation en cours" FontSize="32" FontWeight="Bold"/>
+            <TextBlock x:Name="SubtitleText"
+                       Text="Application des parametres selectionnes..."
+                       FontSize="14" Foreground="#B3FFFFFF" Margin="0,8,0,20"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource GlassCard}"
+                VerticalAlignment="Top" Margin="0,0,0,16">
+            <StackPanel>
+                <TextBlock x:Name="CurrentTaskText" Text="Preparation..."
+                           FontSize="15" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                <ProgressBar x:Name="Progress" Style="{StaticResource ArzheProgress}"
+                             Minimum="0" Maximum="100" Value="0"/>
+                <TextBlock x:Name="PercentText" Text="0 %" FontSize="13"
+                           Foreground="#B3FFFFFF" HorizontalAlignment="Center"
+                           Margin="0,10,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource GlassCard}" MaxHeight="200">
+            <ScrollViewer x:Name="LogScroll" VerticalScrollBarVisibility="Auto">
+                <TextBlock x:Name="LogText"
+                           FontFamily="Cascadia Mono, Consolas"
+                           FontSize="12" Foreground="#CCFFFFFF" TextWrapping="Wrap"/>
+            </ScrollViewer>
+        </Border>
+
+        <Button Grid.Row="3" x:Name="NextButton" Content="Terminer"
+                Style="{StaticResource PrimaryButton}"
+                HorizontalAlignment="Right" Margin="0,16,0,0"
+                IsEnabled="False" Click="Next_Click"/>
+    </Grid>
+</UserControl>
