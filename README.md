@@ -36,7 +36,7 @@ Windows 10 / 11 · 64-bit · ~70 Mo
 
 ## 🌐 Site web
 
-https://arzhe-dev.github.io/arzhe/
+https://arzhe-dev.github.io/Arzhe/website/index.html
 
 ## 📄 Licence
 
