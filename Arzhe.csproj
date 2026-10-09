@@ -27,4 +27,20 @@
     <Resource Include="Resources\arzhe_moon_256.png" />
   </ItemGroup>
 
+
+  <!-- Exclure les backups du projet -->
+  <ItemGroup>
+    <Compile Remove="_backup_*\**\*.cs" />
+    <Compile Remove="_backup_*\**\*.xaml" />
+    <None Remove="_backup_*\**\*" />
+    <Page Remove="_backup_*\**\*.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Resource Include="Resources\Assets\aurora_violet.png" />
+    <Resource Include="Resources\Assets\aurora_purple.png" />
+    <Resource Include="Resources\Assets\aurora_cyan.png" />
+  </ItemGroup>
+
 </Project>

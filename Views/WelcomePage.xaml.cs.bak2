@@ -1,0 +1,190 @@
+﻿using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
+
+namespace Arzhe.Views;
+
+public partial class WelcomePage : UserControl
+{
+    public event Action? RequestNext;
+
+    public WelcomePage()
+    {
+        InitializeComponent();
+        Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        // 1. Generer les particules
+        GenerateParticles();
+
+        // 2. Animer les aurores flottantes
+        AnimateAurora(Aurora1, -300, -150, 6);
+        AnimateAurora(Aurora2, 500, 400, 8);
+        AnimateAurora(Aurora3, 200, 100, 7);
+
+        // 3. Animation du logo (pop + scale)
+        AnimateLogo();
+
+        // 4. Cascade d'apparition des elements
+        AnimateElement(TitleText, TitleTranslate, 300);
+        AnimateElement(SubtitleText, SubtitleTranslate, 450);
+        AnimateElement(MetaPanel, null, 600);
+        AnimateElement(StartButton, ButtonTranslate, 750);
+        AnimateElement(AdminNote, null, 900);
+    }
+
+    private void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        // Nettoyer les particules quand la page se ferme
+        ParticlesCanvas.Children.Clear();
+    }
+
+    // ============================================================
+    //  GENERATION DES PARTICULES FLOTTANTES
+    // ============================================================
+    private readonly Random _rng = new();
+    private System.Collections.Generic.List<(Ellipse, double)> _particles = new();
+    private System.Windows.Threading.DispatcherTimer? _particleTimer;
+
+    private void GenerateParticles()
+    {
+        _particles.Clear();
+        ParticlesCanvas.Children.Clear();
+
+        int count = 25;
+        for (int i = 0; i < count; i++)
+        {
+            var size = _rng.NextDouble() * 3 + 1;
+            var p = new Ellipse
+            {
+                Width = size,
+                Height = size,
+                Fill = new SolidColorBrush(Color.FromArgb(
+                    (byte)(_rng.Next(60, 150)),
+                    124, 92, 255)),
+                Opacity = _rng.NextDouble() * 0.6 + 0.2
+            };
+
+            // Position initiale aleatoire
+            var x = _rng.NextDouble() * 1200;
+            var y = _rng.NextDouble() * 700;
+            Canvas.SetLeft(p, x);
+            Canvas.SetTop(p, y);
+
+            p.Effect = new System.Windows.Media.Effects.BlurEffect { Radius = 1 };
+
+            ParticlesCanvas.Children.Add(p);
+            _particles.Add((p, _rng.NextDouble() * 0.5 + 0.2)); // speed
+        }
+
+        // Timer pour faire monter les particules
+        _particleTimer = new System.Windows.Threading.DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(40)
+        };
+        _particleTimer.Tick += (_, _) => MoveParticles();
+        _particleTimer.Start();
+    }
+
+    private void MoveParticles()
+    {
+        if (_particles.Count == 0) return;
+
+        for (int i = _particles.Count - 1; i >= 0; i--)
+        {
+            var (p, speed) = _particles[i];
+            var y = Canvas.GetTop(p) - speed;
+            var x = Canvas.GetLeft(p);
+
+            // Reinitialiser si trop haut
+            if (y < -20)
+            {
+                y = ActualHeight + 20;
+                x = _rng.NextDouble() * Math.Max(ActualWidth, 800);
+            }
+
+            Canvas.SetTop(p, y);
+            Canvas.SetLeft(p, x);
+        }
+    }
+
+    // ============================================================
+    //  ANIMATIONS
+    // ============================================================
+    private void AnimateAurora(Ellipse aurora, double startX, double endX, double duration)
+    {
+        var xAnim = new DoubleAnimation(startX, endX, TimeSpan.FromSeconds(duration))
+        {
+            AutoReverse = true,
+            RepeatBehavior = RepeatBehavior.Forever,
+            EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
+        };
+        var yStart = Canvas.GetTop(aurora);
+        var yAnim = new DoubleAnimation(yStart, yStart + 40, TimeSpan.FromSeconds(duration * 1.2))
+        {
+            AutoReverse = true,
+            RepeatBehavior = RepeatBehavior.Forever,
+            EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
+        };
+        aurora.BeginAnimation(Canvas.LeftProperty, xAnim);
+        aurora.BeginAnimation(Canvas.TopProperty, yAnim);
+    }
+
+    private void AnimateLogo()
+    {
+        // Fade in
+        var fade = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(600))
+        {
+            BeginTime = TimeSpan.FromMilliseconds(100),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+        LogoImage.BeginAnimation(OpacityProperty, fade);
+
+        // Scale bounce
+        var scaleX = new DoubleAnimation(0.5, 1, TimeSpan.FromMilliseconds(800))
+        {
+            BeginTime = TimeSpan.FromMilliseconds(100),
+            EasingFunction = new BackEase { EasingMode = EasingMode.EaseOut, Amplitude = 0.5 }
+        };
+        var scaleY = new DoubleAnimation(0.5, 1, TimeSpan.FromMilliseconds(800))
+        {
+            BeginTime = TimeSpan.FromMilliseconds(100),
+            EasingFunction = new BackEase { EasingMode = EasingMode.EaseOut, Amplitude = 0.5 }
+        };
+        LogoScale.BeginAnimation(ScaleTransform.ScaleXProperty, scaleX);
+        LogoScale.BeginAnimation(ScaleTransform.ScaleYProperty, scaleY);
+    }
+
+    private void AnimateElement(UIElement element, TranslateTransform? translate, int delayMs)
+    {
+        // Fade in
+        var fade = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(500))
+        {
+            BeginTime = TimeSpan.FromMilliseconds(delayMs),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+        element.BeginAnimation(OpacityProperty, fade);
+
+        // Slide up
+        if (translate != null)
+        {
+            var slide = new DoubleAnimation(20, 0, TimeSpan.FromMilliseconds(500))
+            {
+                BeginTime = TimeSpan.FromMilliseconds(delayMs),
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            };
+            translate.BeginAnimation(TranslateTransform.YProperty, slide);
+        }
+    }
+
+    private void Start_Click(object sender, RoutedEventArgs e)
+    {
+        RequestNext?.Invoke();
+    }
+}

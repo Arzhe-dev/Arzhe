@@ -21,19 +21,19 @@ public static class HardwareDetector
     public static HardwareInfo Detect()
     {
         var info = new HardwareInfo();
-        try { info.Cpu = Wmi("Win32_Processor", "Name"); } catch { }
-        try { info.Gpu = Wmi("Win32_VideoController", "Name"); } catch { }
+        try { info.Cpu = ReadWmi("Win32_Processor", "Name"); } catch { }
+        try { info.Gpu = ReadWmi("Win32_VideoController", "Name"); } catch { }
         info.GpuVendor = DetectGpuVendor(info.Gpu);
         try
         {
-            var ramBytes = WmiUlong("Win32_ComputerSystem", "TotalPhysicalMemory");
+            var ramBytes = ReadWmiUlong("Win32_ComputerSystem", "TotalPhysicalMemory");
             if (ramBytes > 0) info.Ram = (ramBytes / 1024.0 / 1024 / 1024).ToString("F1") + " Go";
         } catch { }
-        try { info.Os = Wmi("Win32_OperatingSystem", "Caption"); } catch { }
+        try { info.Os = ReadWmi("Win32_OperatingSystem", "Caption"); } catch { }
         try
         {
-            var size = WmiUlong("Win32_LogicalDisk", "Size", "DeviceID='C:'");
-            var free = WmiUlong("Win32_LogicalDisk", "FreeSpace", "DeviceID='C:'");
+            var size = ReadWmiUlong("Win32_LogicalDisk", "Size", "DeviceID='C:'");
+            var free = ReadWmiUlong("Win32_LogicalDisk", "FreeSpace", "DeviceID='C:'");
             if (size > 0)
             {
                 double totalGb = size / 1024.0 / 1024 / 1024;
@@ -81,7 +81,7 @@ public static class HardwareDetector
         return "Inconnu";
     }
 
-    private static string Wmi(string cls, string prop, string? where = null)
+    private static string ReadWmi(string cls, string prop, string? where = null)
     {
         var q = $"SELECT {prop} FROM {cls}" + (where != null ? $" WHERE {where}" : "");
         using var s = new ManagementObjectSearcher(q);
@@ -93,7 +93,7 @@ public static class HardwareDetector
         return "Inconnu";
     }
 
-    private static ulong WmiUlong(string cls, string prop, string? where = null)
+    private static ulong ReadWmiUlong(string cls, string prop, string? where = null)
     {
         var q = $"SELECT {prop} FROM {cls}" + (where != null ? $" WHERE {where}" : "");
         using var s = new ManagementObjectSearcher(q);

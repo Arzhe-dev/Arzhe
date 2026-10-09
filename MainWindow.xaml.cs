@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
-using Arzhe.Services;
+using System.Windows.Media.Effects;
+using Arzhe.Models;
 using Arzhe.Views;
 
 namespace Arzhe;
 
 public partial class MainWindow : Window
 {
-    private HardwareInfo? _hw;
+    private ScanResult? _scan;
+    private bool _isAnimating;
 
     public MainWindow()
     {
@@ -19,18 +21,63 @@ public partial class MainWindow : Window
 
     public void Navigate(object view)
     {
-        MainFrame.Opacity = 0;
-        FrameTranslate.X = 40;
-        MainFrame.Content = view;
-        HookEvents(view);
+        if (_isAnimating) return;
+        _isAnimating = true;
 
-        var fade = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(320))
-        { EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut } };
-        var slide = new DoubleAnimation(40, 0, TimeSpan.FromMilliseconds(320))
-        { EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut } };
+        // 1. Animation de SORTIE (page actuelle qui part)
+        var fadeOut = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(180))
+        {
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+        };
+        var slideOut = new DoubleAnimation(0, -30, TimeSpan.FromMilliseconds(180))
+        {
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+        };
+        var blurOut = new DoubleAnimation(0, 8, TimeSpan.FromMilliseconds(180))
+        {
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
+        };
 
-        MainFrame.BeginAnimation(OpacityProperty, fade);
-        FrameTranslate.BeginAnimation(System.Windows.Media.TranslateTransform.XProperty, slide);
+        // Créer un effet blur temporaire si pas présent
+        if (MainFrame.Effect == null)
+            MainFrame.Effect = new BlurEffect { Radius = 0 };
+
+        var blurEffect = (BlurEffect)MainFrame.Effect;
+
+        fadeOut.Completed += (_, _) =>
+        {
+            // 2. Changer la page
+            MainFrame.Content = view;
+            HookEvents(view);
+
+            // Reset
+            FrameTranslate.X = 40;
+            blurEffect.Radius = 8;
+
+            // 3. Animation d'ENTREE (nouvelle page qui arrive)
+            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(320))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            };
+            var slideIn = new DoubleAnimation(40, 0, TimeSpan.FromMilliseconds(320))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            };
+            var blurIn = new DoubleAnimation(8, 0, TimeSpan.FromMilliseconds(400))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            };
+
+            fadeIn.Completed += (_, _) => _isAnimating = false;
+
+            MainFrame.BeginAnimation(OpacityProperty, fadeIn);
+            FrameTranslate.BeginAnimation(TranslateTransform.XProperty, slideIn);
+            blurEffect.BeginAnimation(BlurEffect.RadiusProperty, blurIn);
+        };
+
+        MainFrame.BeginAnimation(OpacityProperty, fadeOut);
+        FrameTranslate.BeginAnimation(TranslateTransform.XProperty, slideOut);
+        blurEffect.BeginAnimation(BlurEffect.RadiusProperty, blurOut);
     }
 
     private void HookEvents(object view)
@@ -39,10 +86,10 @@ public partial class MainWindow : Window
             wp.RequestNext += () => Navigate(new SystemAnalysisPage());
 
         if (view is SystemAnalysisPage sap)
-            sap.RequestNext += hw =>
+            sap.RequestNext += (scan) =>
             {
-                _hw = hw;
-                Navigate(new OptimizationSelectionPage(hw));
+                _scan = scan;
+                Navigate(new OptimizationSelectionPage(_scan));
             };
 
         if (view is OptimizationSelectionPage osp)
@@ -52,10 +99,6 @@ public partial class MainWindow : Window
             ep.RequestNext += () => Navigate(new FinishPage());
     }
 
-    private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-        if (e.ChangedButton == MouseButton.Left) DragMove();
-    }
     private void Minimize_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
     private void Close_Click(object sender, RoutedEventArgs e) => Close();
 }

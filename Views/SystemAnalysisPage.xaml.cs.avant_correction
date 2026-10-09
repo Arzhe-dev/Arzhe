@@ -1,0 +1,206 @@
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using Arzhe.Models;
+using Arzhe.Services;
+
+namespace Arzhe.Views;
+
+public class ScanCard
+{
+    public string Icon { get; set; } = "";
+    public string Label { get; set; } = "";
+    public string Value { get; set; } = "";
+}
+
+public partial class SystemAnalysisPage : UserControl
+{
+    public event Action<ScanResult>? RequestNext;
+    private readonly ObservableCollection<ScanCard> _cards = new();
+    private ScanResult _scan = new();
+
+    public SystemAnalysisPage()
+    {
+        InitializeComponent();
+        CardsContainer.ItemsSource = _cards;
+        Loaded += async (_, _) => await RunAsync();
+    }
+
+    private async Task RunAsync()
+    {
+        // 1. Animation d'entree de l'en-tete
+        AnimateElement(HeaderTitle, HeaderTranslate, 100);
+        AnimateElement(HeaderSubtitle, SubtitleTranslate, 250);
+        AnimateElement(MainProgressBorder, null, 400);
+
+        await Task.Delay(500);
+
+        // 2. Scan reel avec progression
+        var progressReporter = new Progress<(string msg, int pct)>(data =>
+        {
+            StatusText.Text = data.msg;
+            PercentText.Text = $"{data.pct} %";
+
+            // Animer la barre de progression
+            var targetWidth = 700 * (data.pct / 100.0);
+            var anim = new DoubleAnimation(ProgressFill.Width, targetWidth,
+                TimeSpan.FromMilliseconds(300))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            };
+            ProgressFill.BeginAnimation(WidthProperty, anim);
+        });
+
+        _scan = await SystemScanner.ScanAsync((msg, pct) =>
+        {
+            ((IProgress<(string, int)>)progressReporter).Report((msg, pct));
+        });
+
+        // 3. Petite pause pour voir 100%
+        StatusText.Text = "Analyse terminee";
+        await Task.Delay(500);
+
+        // 4. Afficher les cartes en cascade
+        await DisplayCardsAsync();
+
+        // 5. Afficher le bouton
+        AnimateElement(NextButton, ButtonTranslate, 500);
+        NextButton.IsEnabled = true;
+    }
+
+    private async Task DisplayCardsAsync()
+    {
+        _cards.Clear();
+
+        // Construire les cartes
+        _cards.Add(new ScanCard
+        {
+            Icon = "CPU",
+            Label = "PROCESSEUR",
+            Value = _scan.Cpu.Name
+        });
+
+        _cards.Add(new ScanCard
+        {
+            Icon = "GPU",
+            Label = "CARTE GRAPHIQUE",
+            Value = _scan.Gpu.Name + (string.IsNullOrEmpty(_scan.Gpu.Vendor) ? "" : $" ({_scan.Gpu.Vendor})")
+        });
+
+        _cards.Add(new ScanCard
+        {
+            Icon = "RAM",
+            Label = "MEMOIRE",
+            Value = $"{_scan.Ram.TotalMb / 1024} Go @ {_scan.Ram.SpeedMhz} MHz"
+        });
+
+        if (_scan.Disks.Count > 0)
+        {
+            var disk = _scan.Disks[0];
+            _cards.Add(new ScanCard
+            {
+                Icon = "SSD",
+                Label = "DISQUE " + disk.Letter,
+                Value = $"{disk.FreeGb} Go libres / {disk.TotalGb} Go ({disk.Type})"
+            });
+        }
+
+        _cards.Add(new ScanCard
+        {
+            Icon = "OS",
+            Label = "SYSTEME",
+            Value = _scan.Os.Name + $" (Build {_scan.Os.Build})"
+        });
+
+        _cards.Add(new ScanCard
+        {
+            Icon = "FPS",
+            Label = "SCORE SANTE",
+            Value = $"{_scan.HealthScore}/100" + (_scan.HealthScore >= 80 ? " - Excellent" :
+                                                   _scan.HealthScore >= 60 ? " - Bon" : " - A ameliorer")
+        });
+
+        if (_scan.InstalledGames.Count > 0)
+        {
+            _cards.Add(new ScanCard
+            {
+                Icon = "GAM",
+                Label = "JEUX DETECTES",
+                Value = string.Join(", ", _scan.InstalledGames)
+            });
+        }
+
+        // Cascade d'apparition des cartes
+        await Task.Delay(100);
+
+        // Trouver le conteneur ItemsControl pour animer chaque carte
+        for (int i = 0; i < _cards.Count; i++)
+        {
+            await Task.Delay(120);
+
+            // Trouver le Border correspondant
+            var container = FindContainerForItem(CardsContainer, _cards[i]);
+            if (container != null)
+            {
+                AnimateCard(container);
+            }
+        }
+    }
+
+    private FrameworkElement? FindContainerForItem(ItemsControl itemsControl, object item)
+    {
+        return itemsControl.ItemContainerGenerator.ContainerFromItem(item) as FrameworkElement;
+    }
+
+    private void AnimateCard(FrameworkElement container)
+    {
+        // Fade in
+        var fade = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(400))
+        {
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+        container.BeginAnimation(OpacityProperty, fade);
+
+        // Scale bounce
+        var scaleTransform = new ScaleTransform(0.8, 0.8);
+        container.RenderTransform = scaleTransform;
+        container.RenderTransformOrigin = new Point(0.5, 0.5);
+
+        var scaleX = new DoubleAnimation(0.8, 1, TimeSpan.FromMilliseconds(500))
+        {
+            EasingFunction = new BackEase { EasingMode = EasingMode.EaseOut, Amplitude = 0.5 }
+        };
+        var scaleY = new DoubleAnimation(0.8, 1, TimeSpan.FromMilliseconds(500))
+        {
+            EasingFunction = new BackEase { EasingMode = EasingMode.EaseOut, Amplitude = 0.5 }
+        };
+        scaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleX);
+        scaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleY);
+    }
+
+    private void AnimateElement(UIElement element, TranslateTransform? translate, int delayMs)
+    {
+        var fade = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(500))
+        {
+            BeginTime = TimeSpan.FromMilliseconds(delayMs),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+        };
+        element.BeginAnimation(OpacityProperty, fade);
+
+        if (translate != null)
+        {
+            var slide = new DoubleAnimation(20, 0, TimeSpan.FromMilliseconds(500))
+            {
+                BeginTime = TimeSpan.FromMilliseconds(delayMs),
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            };
+            translate.BeginAnimation(TranslateTransform.YProperty, slide);
+        }
+    }
+
+    private void Next_Click(object sender, RoutedEventArgs e) => RequestNext?.Invoke(_scan);
+}
