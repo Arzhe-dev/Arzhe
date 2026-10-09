@@ -1,26 +1,28 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arzhe — Optimiseur Gaming Premium</title>
-<meta name="description" content="Arzhe v2.0 — L'optimiseur gaming premium. 35 modules adaptatifs, design spectaculaire, zéro compromis.">
+<title>Arzhe — L'Optimiseur Gaming Premium</title>
+<meta name="description" content="Arzhe v2.0.1 — Optimiseur gaming nouvelle generation.">
 <link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Curseur custom -->
+<div class="splash" id="splash">
+  <div class="splash-inner">
+    <img src="assets/logo.png" alt="Arzhe" class="splash-logo">
+    <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+    <div class="splash-text">Initialisation</div>
+  </div>
+</div>
+
 <div class="cursor" id="cursor"></div>
 <div class="cursor-dot" id="cursorDot"></div>
-
-<!-- Scroll progress -->
 <div class="scroll-progress" id="scrollProgress"></div>
-
-<!-- Canvas particules de fond -->
 <canvas class="bg-canvas" id="bgCanvas"></canvas>
 
-<!-- NAV -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="#" class="nav-logo">
@@ -28,182 +30,132 @@
       <span>Arzhe</span>
     </a>
     <div class="nav-links">
-      <a href="#features">Fonctionnalités</a>
-      <a href="#showcase">Aperçu</a>
-      <a href="#how">Comment ça marche</a>
-      <a href="#download" class="btn-nav">Télécharger</a>
+      <a href="#features">Fonctionnalites</a>
+      <a href="#showcase">Demo</a>
+      <a href="#download" class="btn-nav magnetic">Telecharger</a>
     </div>
   </div>
 </nav>
 
-<!-- HERO -->
 <header class="hero" id="hero">
   <div class="hero-aurora"></div>
-
-  <div class="hero-inner" data-parallax="0.3">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
     <div class="hero-badge reveal">
       <span class="badge-dot"></span>
-      v2.0.0 — Nouvelle version
+      <span>v2.0.1 — Nouveau logo</span>
     </div>
-
     <h1 class="hero-title reveal">
-      L'optimiseur gaming<br>
-      <span class="hero-gradient" id="heroGradient">nouvelle génération.</span>
+      <span class="line">L'optimiseur</span>
+      <span class="line"><span class="shiny">gaming nouvelle</span></span>
+      <span class="line"><span class="hero-gradient">generation.</span></span>
     </h1>
-
     <p class="hero-subtitle reveal">
-      Arzhe analyse votre matériel, applique <strong>35 modules d'optimisation réversibles</strong>
-      et crée automatiquement un point de restauration.
+      Arzhe analyse votre materiel, applique <strong>35 modules d'optimisation</strong>
+      et cree automatiquement un <strong>point de restauration</strong>.
     </p>
-
     <div class="hero-cta reveal">
-      <a href="https://github.com/Arzhe-dev/Arzhe/releases/latest" class="btn-primary magnetic" target="_blank">
+      <a href="https://github.com/Arzhe-dev/Arzhe/releases/latest" class="btn-primary magnetic" target="_blank" data-ripple>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="7 10 12 15 17 10"/>
           <line x1="12" y1="15" x2="12" y2="3"/>
         </svg>
-        Télécharger v2.0
+        <span>Telecharger Arzhe</span>
+        <span class="btn-arrow">→</span>
       </a>
-      <a href="#features" class="btn-secondary magnetic">Voir les fonctionnalités</a>
+      <a href="#showcase" class="btn-secondary magnetic">Voir la demo</a>
     </div>
-
     <div class="hero-meta reveal">
-      <span>⚡ 100% gratuit</span>
-      <span>🪟 Windows 10 / 11</span>
-      <span>🔐 Réversible</span>
-      <span>🎨 Design premium</span>
+      <span>100% gratuit</span>
+      <span>Windows 10 / 11</span>
+      <span>Reversible</span>
+      <span>Design premium</span>
     </div>
   </div>
-
-  <div class="hero-logo" data-parallax="0.15">
-    <img src="assets/logo.png" alt="Logo Arzhe" width="240" height="240">
+  <div class="hero-logo reveal">
     <div class="hero-logo-glow"></div>
+    <img src="assets/logo.png" alt="Logo Arzhe" width="200" height="200">
   </div>
 </header>
 
-<!-- FEATURES -->
-<section id="features" class="section">
+<section class="trust-bar">
   <div class="container">
-    <div class="section-header reveal">
-      <span class="section-tag">Fonctionnalités</span>
-      <h2>Tout ce qu'il faut pour<br><span class="hero-gradient">jouer sans compromis.</span></h2>
-      <p>Arzhe combine performance, sécurité et un design premium.</p>
-    </div>
-
-    <div class="features-grid">
-
-      <div class="feature-card reveal" data-tilt>
-        <div class="feature-icon">🎬</div>
-        <h3>Splash screen animé</h3>
-        <p>Logo Lune avec animations fluides au démarrage.</p>
-      </div>
-
-      <div class="feature-card reveal" data-tilt>
-        <div class="feature-icon">🌌</div>
-        <h3>Interface premium</h3>
-        <p>Aurores boréales, glassmorphism et particules animées.</p>
-      </div>
-
-      <div class="feature-card reveal" data-tilt>
-        <div class="feature-icon">🖥️</div>
-        <h3>Scan matériel visuel</h3>
-        <p>Détection CPU, GPU, RAM avec cartes élégantes.</p>
-      </div>
-
-      <div class="feature-card reveal" data-tilt>
-        <div class="feature-icon">🎛️</div>
-        <h3>35 modules intelligents</h3>
-        <p>Filtrés selon votre matériel. Presets intelligents.</p>
-      </div>
-
-      <div class="feature-card reveal" data-tilt>
-        <div class="feature-icon">🛡️</div>
-        <h3>Point de restauration</h3>
-        <p>Créé automatiquement avant chaque modification.</p>
-      </div>
-
-      <div class="feature-card reveal" data-tilt>
-        <div class="feature-icon">⚡</div>
-        <h3>Performance GPU</h3>
-        <p>WindowChrome, 60 FPS, -150 Mo de RAM.</p>
-      </div>
-
-      <div class="feature-card reveal" data-tilt>
-        <div class="feature-icon">📜</div>
-        <h3>Journal live coloré</h3>
-        <p>Suivi en temps réel de chaque optimisation.</p>
-      </div>
-
-      <div class="feature-card reveal" data-tilt>
-        <div class="feature-icon">🎉</div>
-        <h3>Confetti animés</h3>
-        <p>Célébrez votre PC optimisé avec style.</p>
-      </div>
-
-      <div class="feature-card reveal" data-tilt>
-        <div class="feature-icon">🌊</div>
-        <h3>Effet Ripple</h3>
-        <p>Boutons Material Design au clic.</p>
-      </div>
-
+    <div class="trust-inner">
+      <div class="trust-item reveal"><div class="trust-number" data-count="35">0</div><div class="trust-label">Modules</div></div>
+      <div class="trust-item reveal"><div class="trust-number" data-count="100">0</div><div class="trust-label">% Reversible</div></div>
+      <div class="trust-item reveal"><div class="trust-number" data-count="60">0</div><div class="trust-label">FPS constants</div></div>
+      <div class="trust-item reveal"><div class="trust-number" data-count="0">0</div><div class="trust-label">Prix en euros</div></div>
     </div>
   </div>
 </section>
 
-<!-- SHOWCASE (scroll animé) -->
+<section id="features" class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Fonctionnalites</span>
+      <h2>Concu pour <span class="hero-gradient">dominer</span>.</h2>
+      <p>Chaque detail pense pour transformer votre PC en machine de guerre.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal" data-tilt><div class="feature-card-glow"></div><div class="feature-icon">Splash</div><h3>Splash screen anime</h3><p>Logo premium avec animations fluides au demarrage.</p></div>
+      <div class="feature-card reveal" data-tilt><div class="feature-card-glow"></div><div class="feature-icon">Aurores</div><h3>Interface premium</h3><p>Aurores boreales, glassmorphism et particules.</p></div>
+      <div class="feature-card reveal" data-tilt><div class="feature-card-glow"></div><div class="feature-icon">Scan</div><h3>Scan materiel</h3><p>Detection CPU, GPU, RAM avec cartes elegantes.</p></div>
+      <div class="feature-card reveal" data-tilt><div class="feature-card-glow"></div><div class="feature-icon">35+</div><h3>35 modules</h3><p>Filtres selon votre materiel.</p></div>
+      <div class="feature-card reveal" data-tilt><div class="feature-card-glow"></div><div class="feature-icon">RESTORE</div><h3>Point de restauration</h3><p>Cree automatiquement avant chaque modification.</p></div>
+      <div class="feature-card reveal" data-tilt><div class="feature-card-glow"></div><div class="feature-icon">GPU</div><h3>Performance GPU</h3><p>Interface 60 FPS, ~150 Mo de RAM economises.</p></div>
+      <div class="feature-card reveal" data-tilt><div class="feature-card-glow"></div><div class="feature-icon">LOG</div><h3>Journal live</h3><p>Suivi colore en temps reel de chaque action.</p></div>
+      <div class="feature-card reveal" data-tilt><div class="feature-card-glow"></div><div class="feature-icon">PARTY</div><h3>Confetti</h3><p>Celebrez votre PC optimise avec style.</p></div>
+      <div class="feature-card reveal" data-tilt><div class="feature-card-glow"></div><div class="feature-icon">RIPPLE</div><h3>Effet Ripple</h3><p>Boutons Material Design au clic.</p></div>
+    </div>
+  </div>
+</section>
+
 <section id="showcase" class="section section-alt">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-tag">Aperçu</span>
-      <h2>Une interface <span class="hero-gradient">premium.</span></h2>
-      <p>Découvrez le nouveau design d'Arzhe v2.0.</p>
+      <span class="section-tag">Apercu</span>
+      <h2>Une experience <span class="hero-gradient">immersive.</span></h2>
     </div>
-
     <div class="showcase-list">
-
       <div class="showcase-item reveal">
         <div class="showcase-text">
           <span class="showcase-number">01</span>
-          <h3>Splash screen animé</h3>
-          <p>Logo Lune avec halo lumineux et barre de chargement fluide au démarrage.</p>
+          <h3>Splash screen</h3>
+          <p>Logo premium avec halo lumineux et barre de chargement fluide au demarrage.</p>
         </div>
-        <div class="showcase-mockup">
+        <div class="showcase-mockup" data-tilt>
           <div class="mockup-screen">
-            <img src="assets/logo.png" alt="Logo" width="60" height="60">
+            <img src="assets/logo.png" alt="Logo" width="80" height="80">
             <div class="mockup-title">Arzhe</div>
             <div class="mockup-bar-small"></div>
           </div>
         </div>
       </div>
-
       <div class="showcase-item reveal reverse">
         <div class="showcase-text">
           <span class="showcase-number">02</span>
-          <h3>Scan matériel intelligent</h3>
-          <p>Détection CPU, GPU, RAM, disque avec cartes animées et score de santé.</p>
+          <h3>Scan intelligent</h3>
+          <p>Detection automatique de votre materiel avec cartes animees et score de sante.</p>
         </div>
-        <div class="showcase-mockup">
+        <div class="showcase-mockup" data-tilt>
           <div class="mockup-screen">
             <div class="mockup-row">
               <div class="mockup-chip">CPU</div>
               <div class="mockup-chip">GPU</div>
               <div class="mockup-chip">RAM</div>
             </div>
-            <div class="mockup-progress-bar">
-              <div class="mockup-progress-fill"></div>
-            </div>
+            <div class="mockup-progress-bar"><div class="mockup-progress-fill"></div></div>
           </div>
         </div>
       </div>
-
       <div class="showcase-item reveal">
         <div class="showcase-text">
           <span class="showcase-number">03</span>
-          <h3>Sélection intelligente</h3>
-          <p>35 modules filtrés selon votre matériel avec badges de risque et presets.</p>
+          <h3>Selection intelligente</h3>
+          <p>35 modules filtres avec badges de risque colores et presets.</p>
         </div>
-        <div class="showcase-mockup">
+        <div class="showcase-mockup" data-tilt>
           <div class="mockup-screen">
             <div class="mockup-toggle-row">
               <div class="mockup-toggle on"></div>
@@ -213,85 +165,74 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- HOW -->
-<section id="how" class="section">
-  <div class="container">
-    <div class="section-header reveal">
-      <span class="section-tag">Comment ça marche</span>
-      <h2>Trois étapes.<br><span class="hero-gradient">Zéro risque.</span></h2>
-    </div>
-
-    <div class="steps-grid">
-
-      <div class="step-card reveal">
-        <div class="step-number">01</div>
-        <h3>Installe</h3>
-        <p>Téléchargez l'installeur (~100 Mo), lancez-le, autorisez l'UAC.</p>
-      </div>
-
-      <div class="step-card reveal">
-        <div class="step-number">02</div>
-        <h3>Choisis</h3>
-        <p>Sélectionnez les modules. Utilisez les presets pour aller plus vite.</p>
-      </div>
-
-      <div class="step-card reveal">
-        <div class="step-number">03</div>
-        <h3>Joue</h3>
-        <p>Point de restauration automatique + journal live de chaque action.</p>
-      </div>
-
+<section class="marquee-section">
+  <div class="marquee">
+    <div class="marquee-content">
+      <span>ULTIMATE PERFORMANCE</span>
+      <span>GAME MODE</span>
+      <span>DNS CLOUDFLARE</span>
+      <span>RESTORE POINT</span>
+      <span>TRIM NVME</span>
+      <span>RAW INPUT</span>
+      <span>PRIVACY</span>
+      <span>HAGS</span>
+      <span>NAGLE OFF</span>
+      <span>CLEAN TEMP</span>
+      <span>ULTIMATE PERFORMANCE</span>
+      <span>GAME MODE</span>
+      <span>DNS CLOUDFLARE</span>
+      <span>RESTORE POINT</span>
+      <span>TRIM NVME</span>
+      <span>RAW INPUT</span>
+      <span>PRIVACY</span>
+      <span>HAGS</span>
+      <span>NAGLE OFF</span>
+      <span>CLEAN TEMP</span>
     </div>
   </div>
 </section>
 
-<!-- DOWNLOAD -->
 <section id="download" class="section section-download">
   <div class="container">
     <div class="download-card reveal">
       <div class="download-glow"></div>
-      <img src="assets/logo.png" alt="Arzhe" width="100" height="100" class="download-logo">
-      <h2>Télécharge Arzhe v2.0</h2>
-      <p>Windows 10 / 11 · 64-bit · ~100 Mo · Gratuit</p>
-
-      <a href="https://github.com/Arzhe-dev/Arzhe/releases/latest" class="btn-primary btn-large magnetic" target="_blank">
+      <img src="assets/logo.png" alt="Arzhe" width="120" height="120" class="download-logo">
+      <h2>Pret a <span class="hero-gradient">booster</span> ton PC ?</h2>
+      <p>Windows 10 / 11 · 64-bit · ~75 Mo · Gratuit</p>
+      <a href="https://github.com/Arzhe-dev/Arzhe/releases/latest" class="btn-primary btn-large magnetic" target="_blank" data-ripple>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="7 10 12 15 17 10"/>
           <line x1="12" y1="15" x2="12" y2="3"/>
         </svg>
-        Télécharger depuis GitHub
+        <span>Telecharger Arzhe v2.0.1</span>
       </a>
-
       <div class="download-note">
-        <strong>⚠️ Windows SmartScreen</strong><br>
+        <strong>Windows SmartScreen</strong><br>
         Windows peut afficher un avertissement.<br>
-        Cliquez sur <strong>« Informations complémentaires »</strong> → <strong>« Exécuter quand même »</strong>.
+        Cliquez sur <strong>Informations complementaires</strong> → <strong>Executer quand meme</strong>.
       </div>
-
       <div class="download-alt">
-        <a href="https://github.com/Arzhe-dev/Arzhe" target="_blank">💻 Code source</a>
-        <a href="https://github.com/Arzhe-dev/Arzhe/releases" target="_blank">📦 Toutes les versions</a>
+        <a href="https://github.com/Arzhe-dev/Arzhe" target="_blank">Code source</a>
+        <a href="https://github.com/Arzhe-dev/Arzhe/releases" target="_blank">Toutes les versions</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-left">
-      <img src="assets/logo.png" alt="Arzhe" width="24" height="24">
-      <span>Arzhe © 2026 — v2.0.0</span>
+      <img src="assets/logo.png" alt="Arzhe" width="28" height="28">
+      <span>Arzhe 2026 — v2.0.1</span>
     </div>
     <div class="footer-right">
-      <a href="#features">Fonctionnalités</a>
-      <a href="#download">Télécharger</a>
+      <a href="#features">Fonctionnalites</a>
+      <a href="#download">Telecharger</a>
       <a href="https://github.com/Arzhe-dev/Arzhe" target="_blank">GitHub</a>
     </div>
   </div>
