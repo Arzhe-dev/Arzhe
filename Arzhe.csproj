@@ -43,4 +43,10 @@
     <Resource Include="Resources\Assets\aurora_cyan.png" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Resource Include="Resources\arzhe_dark_256.png" />
+    <Resource Include="Resources\arzhe_light_256.png" />
+  </ItemGroup>
+
 </Project>

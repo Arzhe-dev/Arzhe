@@ -65,7 +65,7 @@
 
             <!-- Logo Lune -->
             <Image x:Name="LogoImage"
-                   Source="/Resources/Logos/arzhe_moon_256.png"
+                   Source="/Resources/arzhe_dark_256.png"
                    Width="180" Height="180"
                    HorizontalAlignment="Center"
                    Opacity="0"

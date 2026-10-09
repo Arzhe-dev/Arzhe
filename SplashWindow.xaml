@@ -49,7 +49,7 @@
             <!-- Contenu -->
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                <Image Source="/Resources/Logos/arzhe_moon_256.png"
+                <Image Source="/Resources/arzhe_dark_256.png"
                        Width="120" Height="120"
                        RenderOptions.BitmapScalingMode="HighQuality">
                     <Image.RenderTransform>
